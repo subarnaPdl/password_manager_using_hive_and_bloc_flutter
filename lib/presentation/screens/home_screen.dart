@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // ----------Floating Action Button----------- //
       floatingActionButton: FloatingActionButton(
         key: key,
-        onPressed: () {},
+        onPressed: () => Navigator.pushReplacementNamed(context, '/add'),
         child: const Icon(Icons.add),
       ),
     );

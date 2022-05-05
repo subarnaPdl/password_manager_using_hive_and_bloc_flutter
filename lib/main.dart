@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:password_manager/presentation/routes/routes.dart';
 import 'package:password_manager/presentation/screens/createpass_screen.dart';
 import 'package:password_manager/presentation/screens/home_screen.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
+      onGenerateRoute: routes,
       home: const HomeScreen(),
     );
   }
