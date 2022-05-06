@@ -45,6 +45,8 @@ class SignupScreen extends StatelessWidget {
         final formStatus = state.formStatus;
         if (formStatus is FormSubmissionFailed) {
           _showSnackBar(context, formStatus.exception);
+        } else if (formStatus is FormSubmissionSuccess) {
+          Navigator.of(context).pushReplacementNamed('/login');
         }
       },
       child: Form(

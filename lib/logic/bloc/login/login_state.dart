@@ -2,7 +2,6 @@ part of 'login_bloc.dart';
 
 class LoginState {
   final String password;
-  bool get isValidPassword => password.length > 6;
 
   final FormSubmissionStatus formStatus;
 

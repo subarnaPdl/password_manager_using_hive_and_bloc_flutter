@@ -1,17 +1,30 @@
 // ignore_for_file: avoid_print
 
+import 'package:password_manager/logic/savepass.dart';
+
 class AuthRepository {
-  Future login() async {
+  login({required String password}) async {
     print("Attempting Login");
-    await Future.delayed(const Duration(seconds: 3));
-    print("Logged in");
-    throw Exception("Failed to Login");
+
+    SecureStorageUtil _verify = SecureStorageUtil();
+    // ignore: unrelated_type_equality_checks
+    if (password == await _verify.getPass(key: "MasterPass")) {
+      print("Logged in");
+      return true;
+    }
+
+    throw Exception("Password Incorrect");
   }
 
-  Future signup() async {
+  signup({required String password}) async {
     print("Attempting Signup");
-    await Future.delayed(const Duration(seconds: 3));
-    print("Signup Success");
-    throw Exception("Failed to Signup");
+
+    try {
+      SecureStorageUtil _register = SecureStorageUtil();
+      await _register.putPass(key: "MasterPass", value: password);
+      print("Signup Success");
+    } catch (e) {
+      throw Exception("Failed to Signup");
+    }
   }
 }

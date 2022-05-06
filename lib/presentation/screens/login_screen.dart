@@ -44,6 +44,8 @@ class LoginScreen extends StatelessWidget {
         final formStatus = state.formStatus;
         if (formStatus is FormSubmissionFailed) {
           _showSnackBar(context, formStatus.exception);
+        } else if (formStatus is FormSubmissionSuccess) {
+          Navigator.of(context).pushReplacementNamed('/home');
         }
       },
       child: Form(
@@ -73,8 +75,6 @@ class LoginScreen extends StatelessWidget {
           onChanged: (value) => context
               .read<LoginBloc>()
               .add(LoginPasswordChanged(password: value)),
-          validator: (value) =>
-              state.isValidPassword ? null : "Password is too short",
         );
       },
     );

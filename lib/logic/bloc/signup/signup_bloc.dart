@@ -23,7 +23,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       else if (event is SignupSubmitted) {
         emit(state.copyWith(formStatus: FormSubmitting()));
         try {
-          await authRepo.signup();
+          await authRepo.signup(password: state.confirmPassword);
           emit(state.copyWith(formStatus: FormSubmissionSuccess()));
         } catch (e) {
           emit(state.copyWith(formStatus: FormSubmissionFailed(e.toString())));
