@@ -7,4 +7,11 @@ class AuthRepository {
     print("Logged in");
     throw Exception("Failed to Login");
   }
+
+  Future signup() async {
+    print("Attempting Signup");
+    await Future.delayed(const Duration(seconds: 3));
+    print("Signup Success");
+    throw Exception("Failed to Signup");
+  }
 }
