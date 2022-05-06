@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:password_manager/logic/repo/auth_repository.dart';
 import 'package:password_manager/presentation/routes/routes.dart';
-import 'package:password_manager/presentation/screens/createpass_screen.dart';
-import 'package:password_manager/presentation/screens/home_screen.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -15,14 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Pass',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+    return RepositoryProvider(
+      create: (context) => AuthRepository(),
+      child: MaterialApp(
+        title: 'My Pass',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+        onGenerateRoute: routes,
+        initialRoute: '/',
       ),
-      onGenerateRoute: routes,
-      home: const HomeScreen(),
     );
   }
 }
