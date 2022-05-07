@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:password_manager/logic/bloc_observer.dart';
 import 'package:password_manager/logic/repo/auth_repository.dart';
+import 'package:password_manager/logic/repo/pass_repository.dart';
 import 'package:password_manager/presentation/routes/routes.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.deepOrange));
-  runApp(const MyApp());
+  BlocOverrides.runZoned(
+    () => runApp(const MyApp()),
+    blocObserver: MyBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,8 +21,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => AuthRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => AuthRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => PassRepository(),
+        ),
+      ],
       child: MaterialApp(
         title: 'My Pass',
         debugShowCheckedModeBanner: false,

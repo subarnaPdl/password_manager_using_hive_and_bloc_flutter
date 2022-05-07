@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer(const Duration(seconds: 2),
-        () => Navigator.of(context).pushReplacementNamed('/signup'));
+        () => Navigator.of(context).pushReplacementNamed('/home'));
     return Scaffold(
       body: Center(
         child: Image.asset("assets/images/logo64.png"),
