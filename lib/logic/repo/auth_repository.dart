@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:password_manager/data/dataproviders/savepass.dart';
+import 'package:password_manager/data/dataproviders/readwrite_pass.dart';
 
 class AuthRepository {
   login({required String password}) async {
