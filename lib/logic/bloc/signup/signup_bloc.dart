@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:password_manager/logic/repo/auth_repository.dart';
+import 'package:password_manager/data/repositories/auth_repository.dart';
 import 'package:password_manager/logic/form_login_state.dart';
 
 part 'signup_event.dart';

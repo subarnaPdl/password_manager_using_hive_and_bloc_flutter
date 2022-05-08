@@ -4,7 +4,7 @@ import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/createpass/create_pass_bloc.dart';
 import 'package:password_manager/logic/cubit/home/home_cubit.dart';
 import 'package:password_manager/logic/form_login_state.dart';
-import 'package:password_manager/logic/repo/pass_repository.dart';
+import 'package:password_manager/data/repositories/pass_repository.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
-import 'package:password_manager/logic/repo/pass_repository.dart';
+import 'package:password_manager/data/repositories/pass_repository.dart';
 
 part 'home_state.dart';
 

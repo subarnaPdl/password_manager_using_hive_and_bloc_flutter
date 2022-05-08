@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/logic/bloc/signup/signup_bloc.dart';
 import 'package:password_manager/logic/form_login_state.dart';
-import 'package:password_manager/logic/repo/auth_repository.dart';
+import 'package:password_manager/data/repositories/auth_repository.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key? key}) : super(key: key);

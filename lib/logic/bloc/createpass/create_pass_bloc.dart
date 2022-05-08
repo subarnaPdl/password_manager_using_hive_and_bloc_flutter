@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:password_manager/logic/form_login_state.dart';
-import 'package:password_manager/logic/repo/pass_repository.dart';
+import 'package:password_manager/data/repositories/pass_repository.dart';
 
 part 'create_pass_event.dart';
 part 'create_pass_state.dart';
