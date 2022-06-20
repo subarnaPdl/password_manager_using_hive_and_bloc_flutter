@@ -49,35 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _floattingActionButton() {
-    return FloatingActionButton(
-      key: key,
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => BlocProvider(
-            create: (context) =>
-                CreatePassBloc(passRepo: context.read<PassRepository>()),
-            child: _createPassView(),
-          ),
-        );
-      },
-      child: const Icon(Icons.add),
-    );
-  }
-
   Widget _bodyView() {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is PassListLoadSuccess) {
+        if (state is PassListInitial) {
+          context.read<HomeCubit>().getPassList();
+        } else if (state is PassListLoading) {
+          return _loadingView();
+        } else if (state is PassListLoadSuccess) {
           return state.passList.isEmpty
               ? _emptyPassView()
               : _passListView(state.passList);
         } else if (state is PassListLoadFailure) {
+          // context.read<HomeCubit>().close();
           return _exceptionView(state.exception);
-        } else {
-          return _loadingView();
         }
+        return _loadingView();
       },
     );
   }
@@ -115,25 +102,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _createPassView() {
-    return BlocListener<CreatePassBloc, CreatePassState>(
-      listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is FormSubmissionFailed) {
-          _exceptionView(formStatus.exception);
-        } else if (formStatus is FormSubmissionSuccess) {
-          Navigator.of(context).pop();
-        }
+  Widget _floattingActionButton() {
+    return FloatingActionButton(
+      key: key,
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => BlocProvider(
+            create: (context) => CreatePassBloc(context.read<PassRepository>()),
+            child: _createPassView(),
+          ),
+        );
       },
-      child: Form(
-        child: Column(
-          children: [
-            _createPassViewWebsiteName(),
-            _createPassViewPassword(),
-            _createPassViewUsername(),
-            _createPassViewSubmitButton(),
-          ],
-        ),
+      child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _createPassView() {
+    return Form(
+      child: Column(
+        children: [
+          _createPassViewWebsiteName(),
+          _createPassViewUsername(),
+          _createPassViewPassword(),
+          _createPassViewSubmitButton(),
+        ],
       ),
     );
   }
@@ -199,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
             : ElevatedButton(
                 onPressed: () {
                   context.read<CreatePassBloc>().add(CreatePassSubmitted());
+                  Navigator.of(context).pushReplacementNamed('/home');
                 },
                 child: const Text('Save Password'));
       },

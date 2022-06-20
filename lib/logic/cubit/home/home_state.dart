@@ -2,6 +2,8 @@ part of 'home_cubit.dart';
 
 abstract class HomeState {}
 
+class PassListInitial extends HomeState {}
+
 class PassListLoading extends HomeState {}
 
 class PassListLoadSuccess extends HomeState {
