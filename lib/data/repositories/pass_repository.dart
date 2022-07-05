@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_null_aware_operator
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 
@@ -17,33 +19,31 @@ class PassRepository {
 
   // Fetch data
   Future<List<PassModel>> getData() async {
-    print(
-        "Fetch data called. Data : ${_passList.values.toList()[0].websiteName}");
-    return _passList.values.toList();
+    print("Fetch data called.");
+    return _passList.values?.toList() ?? [];
   }
 
   // Store data
-  Future<void> saveData(PassModel newPass) async {
-    print(
-        "Store data called. Data is \n WebsiteName : ${newPass.websiteName} \n Username : ${newPass.username} \n Password : ${newPass.password}");
-    await _passList.add(newPass);
+  Future<void> saveData(PassModel pass) async {
+    print("Store data called. Id = ${pass.id}");
+    await _passList.add(pass);
   }
 
   // Delete data
-  Future<void> removeData({required String id}) async {
-    print("Remove data called.");
+  Future<void> deleteData(String id) async {
+    print("Delete data called. Id = $id");
+
     final passToRemove =
         _passList.values.firstWhere((element) => element.id == id);
     await _passList.delete(passToRemove);
   }
 
   // Update data
-  Future<void> updateData(
-      {required String id, required PassModel updatedPass}) async {
-    print("Update data called.");
+  Future<void> updateData(String id, PassModel pass) async {
+    print("Update data called. Id = $id");
     final passToUpdate =
         _passList.values.firstWhere((element) => element.id == id);
     final index = passToUpdate.key as int; //index of pass to update
-    await _passList.put(index, updatedPass);
+    await _passList.put(index, pass);
   }
 }

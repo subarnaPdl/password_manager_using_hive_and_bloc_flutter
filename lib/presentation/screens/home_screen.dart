@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
-import 'package:password_manager/logic/bloc/createpass/create_pass_bloc.dart';
-import 'package:password_manager/logic/cubit/home/home_cubit.dart';
-import 'package:password_manager/logic/form_login_state.dart';
+import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/data/repositories/pass_repository.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,6 +16,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey key = GlobalKey();
+  final TextEditingController _websiteTEC = TextEditingController();
+  final TextEditingController _userNameTEC = TextEditingController();
+  final TextEditingController _passwordTEC = TextEditingController();
+  Uuid uuid = const Uuid();
 
   @override
   void initState() {
@@ -26,13 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      floatingActionButton: _floattingActionButton(),
-      drawer: const SideMenu(),
-      body: BlocProvider(
-        create: (context) => HomeCubit(),
-        child: _bodyView(),
+    return BlocProvider(
+      create: (context) =>
+          PassBloc(context.read<PassRepository>())..add(PassLoadEvent()),
+      child: Scaffold(
+        appBar: _appBar(),
+        floatingActionButton: _floattingActionButton(),
+        drawer: const SideMenu(),
+        body: _bodyView(),
       ),
     );
   }
@@ -50,19 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _bodyView() {
-    return BlocBuilder<HomeCubit, HomeState>(
+    return BlocBuilder<PassBloc, PassState>(
       builder: (context, state) {
-        if (state is PassListInitial) {
-          context.read<HomeCubit>().getPassList();
-        } else if (state is PassListLoading) {
+        if (state is PassInitial) {
           return _loadingView();
-        } else if (state is PassListLoadSuccess) {
+        } else if (state is PassLoadedState) {
           return state.passList.isEmpty
               ? _emptyPassView()
               : _passListView(state.passList);
-        } else if (state is PassListLoadFailure) {
-          // context.read<HomeCubit>().close();
-          return _exceptionView(state.exception);
         }
         return _loadingView();
       },
@@ -108,9 +107,38 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () {
         showModalBottomSheet(
           context: context,
-          builder: (context) => BlocProvider(
-            create: (context) => CreatePassBloc(context.read<PassRepository>()),
-            child: _createPassView(),
+          builder: (context) => Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Website Name",
+                  ),
+                  controller: _websiteTEC,
+                ),
+                TextFormField(
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Username",
+                  ),
+                  controller: _userNameTEC,
+                ),
+                TextFormField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Password",
+                  ),
+                  controller: _passwordTEC,
+                ),
+                _createPassViewSubmitButton(),
+              ],
+            ),
           ),
         );
       },
@@ -118,88 +146,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _createPassView() {
-    return Form(
-      child: Column(
-        children: [
-          _createPassViewWebsiteName(),
-          _createPassViewUsername(),
-          _createPassViewPassword(),
-          _createPassViewSubmitButton(),
-        ],
-      ),
-    );
-  }
-
-  Widget _createPassViewWebsiteName() {
-    return BlocBuilder<CreatePassBloc, CreatePassState>(
-      builder: (context, state) {
-        return TextFormField(
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Website Name",
-          ),
-          onChanged: (value) => context
-              .read<CreatePassBloc>()
-              .add(CreatePassWebsiteChanged(websiteName: value)),
-        );
-      },
-    );
-  }
-
-  Widget _createPassViewUsername() {
-    return BlocBuilder<CreatePassBloc, CreatePassState>(
-      builder: (context, state) {
-        return TextFormField(
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Username",
-          ),
-          onChanged: (value) => context
-              .read<CreatePassBloc>()
-              .add(CreatePassUsernameChanged(username: value)),
-        );
-      },
-    );
-  }
-
-  Widget _createPassViewPassword() {
-    return BlocBuilder<CreatePassBloc, CreatePassState>(
-      builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Password",
-          ),
-          onChanged: (value) => context
-              .read<CreatePassBloc>()
-              .add(CreatePassPasswordChanged(password: value)),
-        );
-      },
-    );
-  }
-
   Widget _createPassViewSubmitButton() {
-    return BlocBuilder<CreatePassBloc, CreatePassState>(
+    return BlocBuilder<PassBloc, PassState>(
       builder: (context, state) {
-        return state.formStatus is FormSubmitting
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: () {
-                  context.read<CreatePassBloc>().add(CreatePassSubmitted());
-                  Navigator.of(context).pushReplacementNamed('/home');
-                },
-                child: const Text('Save Password'));
+        return ElevatedButton(
+            onPressed: () {
+              context.read<PassBloc>().add(PassAddEvent(
+                      pass: PassModel(
+                    id: uuid.v4(),
+                    websiteName: _websiteTEC.text,
+                    username: _userNameTEC.text,
+                    password: _passwordTEC.text,
+                  )));
+              Navigator.of(context).pushReplacementNamed('/home');
+            },
+            child: const Text('Save Password'));
       },
     );
-  }
-
-  Widget _exceptionView(String exception) {
-    return Center(child: Text(exception));
   }
 }

@@ -35,7 +35,7 @@ void launchTutorial(BuildContext context, GlobalKey key) {
     ],
   ));
 
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     tutorialCoachMark = TutorialCoachMark(
       context,
       targets: targets,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_manager/data/repositories/auth_repository.dart';
 import 'package:password_manager/data/repositories/pass_repository.dart';
@@ -9,9 +8,9 @@ import 'package:password_manager/presentation/routes/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
+  // Hive
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.deepOrange));
 
   // To look at the current state info
   BlocOverrides.runZoned(

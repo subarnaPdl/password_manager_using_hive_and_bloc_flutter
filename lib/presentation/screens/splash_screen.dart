@@ -10,6 +10,10 @@ class SplashScreen extends StatelessWidget {
     Timer(const Duration(seconds: 2),
         () => Navigator.of(context).pushReplacementNamed('/home'));
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.zero,
+        child: AppBar(),
+      ),
       body: Center(
         child: Image.asset("assets/images/logo64.png"),
       ),
