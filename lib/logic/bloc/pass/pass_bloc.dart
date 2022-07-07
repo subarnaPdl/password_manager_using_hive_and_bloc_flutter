@@ -11,8 +11,6 @@ part 'pass_state.dart';
 class PassBloc extends Bloc<PassEvent, PassState> {
   final PassRepository _passRepo;
   PassBloc(this._passRepo) : super(PassInitial()) {
-    print("PassBloc constructor called");
-
     on<PassLoadEvent>(_passLoadEvent);
     on<PassAddEvent>(_passAddEvent);
     on<PassUpdateEvent>(_passUpdateEvent);
@@ -29,18 +27,21 @@ class PassBloc extends Bloc<PassEvent, PassState> {
   Future<void> _passAddEvent(
       PassAddEvent event, Emitter<PassState> emit) async {
     print("Pass add event called");
+    emit(PassInitial());
     _passRepo.saveData(event.pass);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   void _passUpdateEvent(PassUpdateEvent event, Emitter<PassState> emit) async {
     print("Pass update event called");
+    emit(PassInitial());
     _passRepo.updateData(event.id, event.pass);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   void _passDeleteEvent(PassDeleteEvent event, Emitter<PassState> emit) async {
     print("Pass delete event called");
+    emit(PassInitial());
     _passRepo.deleteData(event.id);
     emit(PassLoadedState(await _passRepo.getData()));
   }

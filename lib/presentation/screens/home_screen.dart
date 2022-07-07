@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
-import 'package:password_manager/data/repositories/pass_repository.dart';
+import 'package:password_manager/presentation/widgets/addpass.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
-import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,10 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey key = GlobalKey();
-  final TextEditingController _websiteTEC = TextEditingController();
-  final TextEditingController _userNameTEC = TextEditingController();
-  final TextEditingController _passwordTEC = TextEditingController();
-  Uuid uuid = const Uuid();
 
   @override
   void initState() {
@@ -29,15 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          PassBloc(context.read<PassRepository>())..add(PassLoadEvent()),
-      child: Scaffold(
-        appBar: _appBar(),
-        floatingActionButton: _floattingActionButton(),
-        drawer: const SideMenu(),
-        body: _bodyView(),
-      ),
+    return Scaffold(
+      appBar: _appBar(),
+      body: _bodyView(),
+      drawer: const SideMenu(),
+      floatingActionButton: _floatingActionButton(),
     );
   }
 
@@ -65,6 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         return _loadingView();
       },
+    );
+  }
+
+  Widget _floatingActionButton() {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () => showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return const AddPassWidget();
+        },
+      ),
     );
   }
 
@@ -97,70 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
       itemBuilder: (context, index) {
         final pass = passList[index];
         return ListTile(title: Text(pass.websiteName));
-      },
-    );
-  }
-
-  Widget _floattingActionButton() {
-    return FloatingActionButton(
-      key: key,
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => Form(
-            child: Column(
-              children: [
-                TextFormField(
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Website Name",
-                  ),
-                  controller: _websiteTEC,
-                ),
-                TextFormField(
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Username",
-                  ),
-                  controller: _userNameTEC,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
-                  ),
-                  controller: _passwordTEC,
-                ),
-                _createPassViewSubmitButton(),
-              ],
-            ),
-          ),
-        );
-      },
-      child: const Icon(Icons.add),
-    );
-  }
-
-  Widget _createPassViewSubmitButton() {
-    return BlocBuilder<PassBloc, PassState>(
-      builder: (context, state) {
-        return ElevatedButton(
-            onPressed: () {
-              context.read<PassBloc>().add(PassAddEvent(
-                      pass: PassModel(
-                    id: uuid.v4(),
-                    websiteName: _websiteTEC.text,
-                    username: _userNameTEC.text,
-                    password: _passwordTEC.text,
-                  )));
-              Navigator.of(context).pushReplacementNamed('/home');
-            },
-            child: const Text('Save Password'));
       },
     );
   }
