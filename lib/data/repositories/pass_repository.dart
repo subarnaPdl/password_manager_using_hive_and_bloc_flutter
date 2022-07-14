@@ -33,8 +33,14 @@ class PassRepository {
   Future<void> deleteData(String id) async {
     print("Delete data called. Id = $id");
 
-    final passToRemove =
+    PassModel passToRemove =
         _passList.values.firstWhere((element) => element.id == id);
+
+    print(
+        "${passToRemove.id} : ${passToRemove.title} = ${passToRemove.password}");
+
+    print(_passList.values);
+
     await _passList.delete(passToRemove);
   }
 
