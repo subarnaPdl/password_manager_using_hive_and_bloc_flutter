@@ -11,9 +11,8 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        padding: const EdgeInsets.only(top: 30),
+    return SafeArea(
+      child: Drawer(
         child: Column(
           children: [
             // Header

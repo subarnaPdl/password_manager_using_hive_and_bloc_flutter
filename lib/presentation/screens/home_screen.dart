@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
-import 'package:password_manager/presentation/widgets/addpass.dart';
+import 'package:password_manager/presentation/screens/addpass_screen.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 
@@ -62,12 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _floatingActionButton() {
     return FloatingActionButton(
       child: const Icon(Icons.add),
-      onPressed: () => showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return const AddPassWidget();
-        },
-      ),
+      onPressed: () => Navigator.of(context).pushNamed('/addPass'),
     );
   }
 
@@ -99,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: passList.length,
       itemBuilder: (context, index) {
         final pass = passList[index];
-        return ListTile(title: Text(pass.websiteName));
+        return ListTile(title: Text(pass.title));
       },
     );
   }

@@ -18,24 +18,27 @@ class PassModelAdapter extends TypeAdapter<PassModel> {
     };
     return PassModel(
       id: fields[0] as String,
-      websiteName: fields[1] as String,
+      title: fields[1] as String,
       username: fields[2] as String,
       password: fields[3] as String,
+      notes: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, PassModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.websiteName)
+      ..write(obj.title)
       ..writeByte(2)
       ..write(obj.username)
       ..writeByte(3)
-      ..write(obj.password);
+      ..write(obj.password)
+      ..writeByte(4)
+      ..write(obj.notes);
   }
 
   @override
