@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
+import 'package:password_manager/presentation/screens/passview_screen.dart';
+import 'package:password_manager/presentation/screens/usersview_screen.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 
@@ -89,27 +91,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _passListView(List<PassModel> passList) {
+  Widget _passListView(List<SuperPassModel> passList) {
     return ListView.builder(
       itemCount: passList.length,
       itemBuilder: (context, index) {
-        final pass = passList[index];
+        SuperPassModel pass = passList[index];
         return Slidable(
-            child: ListTile(title: Text(pass.title)),
-            endActionPane: ActionPane(
-              extentRatio: 0.2,
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  onPressed: (context) {
-                    context.read<PassBloc>().add(PassDeleteEvent(id: pass.id));
-                  },
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                )
-              ],
-            ));
+          endActionPane: ActionPane(
+            extentRatio: 0.2,
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) {
+                  context.read<PassBloc>().add(PassDeleteEvent(id: pass.id));
+                },
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+              )
+            ],
+          ),
+          child: ListTile(
+            title: Text(pass.title),
+            onTap: () {
+              print(pass.id);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersViewScreen(pass: pass),
+                  ));
+            },
+          ),
+        );
       },
     );
   }

@@ -6,17 +6,17 @@ part of 'pass_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PassModelAdapter extends TypeAdapter<PassModel> {
+class PassModelAdapter extends TypeAdapter<SuperPassModel> {
   @override
   final int typeId = 0;
 
   @override
-  PassModel read(BinaryReader reader) {
+  SuperPassModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PassModel(
+    return SuperPassModel(
       id: fields[0] as String,
       title: fields[1] as String,
       username: fields[2] as String,
@@ -26,7 +26,7 @@ class PassModelAdapter extends TypeAdapter<PassModel> {
   }
 
   @override
-  void write(BinaryWriter writer, PassModel obj) {
+  void write(BinaryWriter writer, SuperPassModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)

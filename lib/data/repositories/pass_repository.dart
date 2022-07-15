@@ -4,11 +4,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 
 class PassRepository {
-  late Box<PassModel> _passList;
+  late Box<SuperPassModel> _passList;
 
   Future<void> init() async {
     Hive.registerAdapter(PassModelAdapter());
-    _passList = await Hive.openBox<PassModel>('pass');
+    _passList = await Hive.openBox<SuperPassModel>('pass');
     print("Hive Loaded");
   }
 
@@ -18,13 +18,13 @@ class PassRepository {
   }
 
   // Fetch data
-  Future<List<PassModel>> getData() async {
+  Future<List<SuperPassModel>> getData() async {
     print("Fetch data called.");
     return _passList.values?.toList() ?? [];
   }
 
   // Store data
-  Future<void> saveData(PassModel pass) async {
+  Future<void> saveData(SuperPassModel pass) async {
     print("Store data called. Id = ${pass.id}");
     await _passList.add(pass);
   }
@@ -33,19 +33,13 @@ class PassRepository {
   Future<void> deleteData(String id) async {
     print("Delete data called. Id = $id");
 
-    PassModel passToRemove =
+    SuperPassModel passToRemove =
         _passList.values.firstWhere((element) => element.id == id);
-
-    print(
-        "${passToRemove.id} : ${passToRemove.title} = ${passToRemove.password}");
-
-    print(_passList.values);
-
-    await _passList.delete(passToRemove);
+    await passToRemove.delete();
   }
 
   // Update data
-  Future<void> updateData(String id, PassModel pass) async {
+  Future<void> updateData(String id, SuperPassModel pass) async {
     print("Update data called. Id = $id");
     final passToUpdate =
         _passList.values.firstWhere((element) => element.id == id);

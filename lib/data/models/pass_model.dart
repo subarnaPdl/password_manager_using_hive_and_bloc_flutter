@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'pass_model.g.dart';
 
 @HiveType(typeId: 0)
-class PassModel extends HiveObject {
+class SuperPassModel extends HiveObject {
   @HiveField(0)
   final String id;
   @HiveField(1)
@@ -15,7 +15,7 @@ class PassModel extends HiveObject {
   @HiveField(4)
   final String notes;
 
-  PassModel({
+  SuperPassModel({
     required this.id,
     required this.title,
     required this.username,
@@ -33,8 +33,8 @@ class PassModel extends HiveObject {
     };
   }
 
-  factory PassModel.fromJson(Map<String, dynamic> json) {
-    return PassModel(
+  factory SuperPassModel.fromJson(Map<String, dynamic> json) {
+    return SuperPassModel(
       id: json['id'],
       title: json['website'],
       username: json['username'],
@@ -43,3 +43,5 @@ class PassModel extends HiveObject {
     );
   }
 }
+
+class PassModel {}

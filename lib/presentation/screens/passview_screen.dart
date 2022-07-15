@@ -4,14 +4,15 @@ import 'package:uuid/uuid.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 
-class AddPassScreen extends StatefulWidget {
-  const AddPassScreen({Key? key}) : super(key: key);
+class PassViewScreen extends StatefulWidget {
+  final SuperPassModel pass;
+  const PassViewScreen({Key? key, required this.pass}) : super(key: key);
 
   @override
-  State<AddPassScreen> createState() => _AddPassScreenState();
+  State<PassViewScreen> createState() => _PassViewScreenState();
 }
 
-class _AddPassScreenState extends State<AddPassScreen> {
+class _PassViewScreenState extends State<PassViewScreen> {
   final _nameTEC = TextEditingController();
   final _userNameTEC = TextEditingController();
   final _passwordTEC = TextEditingController();
@@ -24,7 +25,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Password"),
+        title: Text(widget.pass.title),
       ),
       body: _bodyView(),
     );

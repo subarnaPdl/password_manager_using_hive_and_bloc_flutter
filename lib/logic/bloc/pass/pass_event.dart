@@ -6,12 +6,12 @@ abstract class PassEvent {}
 class PassLoadEvent extends PassEvent {}
 
 class PassAddEvent extends PassEvent {
-  final PassModel pass;
+  final SuperPassModel pass;
   PassAddEvent({required this.pass});
 }
 
 class PassUpdateEvent extends PassEvent {
-  final PassModel pass;
+  final SuperPassModel pass;
   final String id;
   PassUpdateEvent({required this.id, required this.pass});
 }

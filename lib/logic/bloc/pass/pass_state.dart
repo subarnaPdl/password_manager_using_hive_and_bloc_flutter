@@ -6,7 +6,7 @@ abstract class PassState {}
 class PassInitial extends PassState {}
 
 class PassLoadedState extends PassState {
-  final List<PassModel> passList;
+  final List<SuperPassModel> passList;
 
   PassLoadedState(this.passList);
 }
