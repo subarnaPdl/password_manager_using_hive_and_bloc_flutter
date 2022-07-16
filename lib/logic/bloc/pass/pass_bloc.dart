@@ -28,21 +28,24 @@ class PassBloc extends Bloc<PassEvent, PassState> {
       PassAddEvent event, Emitter<PassState> emit) async {
     print("Pass add event called");
     emit(PassInitial());
-    _passRepo.saveData(event.pass);
+    _passRepo.saveData(event.title, event.passModel);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   void _passUpdateEvent(PassUpdateEvent event, Emitter<PassState> emit) async {
     print("Pass update event called");
     emit(PassInitial());
-    _passRepo.updateData(event.id, event.pass);
+    _passRepo.updateData(
+        title: event.title,
+        username: event.username,
+        newPassModel: event.passModel);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   void _passDeleteEvent(PassDeleteEvent event, Emitter<PassState> emit) async {
     print("Pass delete event called");
     emit(PassInitial());
-    _passRepo.deleteData(event.id);
+    _passRepo.deleteData(event.title);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 }

@@ -5,43 +5,55 @@ part 'pass_model.g.dart';
 @HiveType(typeId: 0)
 class SuperPassModel extends HiveObject {
   @HiveField(0)
-  final String id;
-  @HiveField(1)
   final String title;
-  @HiveField(2)
-  final String username;
-  @HiveField(3)
-  final String password;
-  @HiveField(4)
-  final String notes;
+  @HiveField(1)
+  final List<PassModel> passModel;
 
   SuperPassModel({
-    required this.id,
     required this.title,
-    required this.username,
-    required this.password,
-    required this.notes,
+    required this.passModel,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'websiteName': title,
+      'passModel': passModel,
+    };
+  }
+
+  factory SuperPassModel.fromJson(Map<String, dynamic> json) {
+    return SuperPassModel(
+      title: json['website'],
+      passModel: json['passModel'],
+    );
+  }
+}
+
+@HiveType(typeId: 1)
+class PassModel extends HiveObject {
+  String username;
+  String password;
+  String notes;
+
+  PassModel({
+    this.username = '',
+    this.password = '',
+    this.notes = '',
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
       'username': username,
       'password': password,
       'notes': notes,
     };
   }
 
-  factory SuperPassModel.fromJson(Map<String, dynamic> json) {
-    return SuperPassModel(
-      id: json['id'],
-      title: json['website'],
+  factory PassModel.fromJson(Map<String, dynamic> json) {
+    return PassModel(
       username: json['username'],
       password: json['password'],
       notes: json['notes'],
     );
   }
 }
-
-class PassModel {}

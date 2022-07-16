@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView.builder(
       itemCount: passList.length,
       itemBuilder: (context, index) {
-        SuperPassModel pass = passList[index];
+        SuperPassModel superPassModel = passList[index];
         return Slidable(
           endActionPane: ActionPane(
             extentRatio: 0.2,
@@ -103,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  context.read<PassBloc>().add(PassDeleteEvent(id: pass.id));
+                  context
+                      .read<PassBloc>()
+                      .add(PassDeleteEvent(title: superPassModel.title));
                 },
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
@@ -112,13 +114,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           child: ListTile(
-            title: Text(pass.title),
+            title: Text(superPassModel.title),
             onTap: () {
-              print(pass.id);
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UsersViewScreen(pass: pass),
+                    builder: (context) =>
+                        UsersViewScreen(superPassModel: superPassModel),
                   ));
             },
           ),

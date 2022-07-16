@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 
 class PassViewScreen extends StatefulWidget {
-  final SuperPassModel pass;
-  const PassViewScreen({Key? key, required this.pass}) : super(key: key);
+  final SuperPassModel superPassModel;
+  const PassViewScreen({Key? key, required this.superPassModel})
+      : super(key: key);
 
   @override
   State<PassViewScreen> createState() => _PassViewScreenState();
@@ -17,7 +17,6 @@ class _PassViewScreenState extends State<PassViewScreen> {
   final _userNameTEC = TextEditingController();
   final _passwordTEC = TextEditingController();
   final _notesTEC = TextEditingController();
-  Uuid uuid = const Uuid();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -25,7 +24,7 @@ class _PassViewScreenState extends State<PassViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.pass.title),
+        title: Text(widget.superPassModel.title),
       ),
       body: _bodyView(),
     );
@@ -105,9 +104,8 @@ class _PassViewScreenState extends State<PassViewScreen> {
 
                       if (isValidForm) {
                         context.read<PassBloc>().add(PassAddEvent(
-                              pass: SuperPassModel(
-                                id: uuid.v4(),
-                                title: _nameTEC.text,
+                              title: _nameTEC.text,
+                              passModel: PassModel(
                                 username: _userNameTEC.text,
                                 password: _passwordTEC.text,
                                 notes: _notesTEC.text,

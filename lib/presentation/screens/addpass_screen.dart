@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 
@@ -16,7 +15,6 @@ class _AddPassScreenState extends State<AddPassScreen> {
   final _userNameTEC = TextEditingController();
   final _passwordTEC = TextEditingController();
   final _notesTEC = TextEditingController();
-  Uuid uuid = const Uuid();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -104,9 +102,8 @@ class _AddPassScreenState extends State<AddPassScreen> {
 
                       if (isValidForm) {
                         context.read<PassBloc>().add(PassAddEvent(
-                              pass: SuperPassModel(
-                                id: uuid.v4(),
-                                title: _nameTEC.text,
+                              title: _nameTEC.text,
+                              passModel: PassModel(
                                 username: _userNameTEC.text,
                                 password: _passwordTEC.text,
                                 notes: _notesTEC.text,
