@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 
 class PassViewScreen extends StatefulWidget {
-  final SuperPassModel superPassModel;
-  const PassViewScreen({Key? key, required this.superPassModel})
+  final String title;
+  final PassModel passModel;
+  const PassViewScreen({Key? key, required this.title, required this.passModel})
       : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class _PassViewScreenState extends State<PassViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.superPassModel.title),
+        title: Text(widget.title),
       ),
       body: _bodyView(),
     );

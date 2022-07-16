@@ -31,11 +31,17 @@ class PassRepository {
     if (!_passList.values.any((element) => element.title == title)) {
       await _passList.add(SuperPassModel(title: title, passModel: [passModel]));
     } else {
+      print("executed");
       final pMs = _passList.values
           .firstWhere((element) => element.title == title)
           .passModel;
       pMs.add(passModel);
-      await _passList.add(SuperPassModel(title: title, passModel: pMs));
+
+      final index =
+          (_passList.values.firstWhere((element) => element.title == title)).key
+              as int; //index of pass to modify
+
+      await _passList.put(index, SuperPassModel(title: title, passModel: pMs));
     }
 
     print("pass saved");

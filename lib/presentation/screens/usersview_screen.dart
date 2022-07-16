@@ -10,9 +10,19 @@ class UsersViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(superPassModel.title),
+      ),
+      body: _bodyView(),
+    );
+  }
+
+  Widget _bodyView() {
     return ListView.builder(
       itemCount: superPassModel.passModel.length,
       itemBuilder: (context, index) {
+        final pm = superPassModel.passModel[index];
         return Slidable(
           endActionPane: ActionPane(
             extentRatio: 0.2,
@@ -31,13 +41,13 @@ class UsersViewScreen extends StatelessWidget {
             ],
           ),
           child: ListTile(
-            title: Text(superPassModel.title),
+            title: Text(pm.username),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PassViewScreen(superPassModel: superPassModel),
+                    builder: (context) => PassViewScreen(
+                        title: superPassModel.title, passModel: pm),
                   ));
             },
           ),
