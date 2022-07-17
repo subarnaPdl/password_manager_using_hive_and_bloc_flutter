@@ -79,6 +79,7 @@ class PassRepository {
     final passModels = passToUpdate.passModel;
     final index = passModels.indexWhere((element) =>
         element.username == username); //index of username to update
+    print(index);
     passModels[index] = newPassModel;
 
     final index2 = passToUpdate.key as int; //index of pass to update
