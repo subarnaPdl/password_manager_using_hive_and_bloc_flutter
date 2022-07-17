@@ -31,8 +31,11 @@ class SuperPassModel extends HiveObject {
 
 @HiveType(typeId: 1)
 class PassModel extends HiveObject {
+  @HiveField(0)
   String username;
+  @HiveField(1)
   String password;
+  @HiveField(2)
   String notes;
 
   PassModel({

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:password_manager/data/models/pass_model.dart';
+import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/screens/passview_screen.dart';
 
 class UsersViewScreen extends StatelessWidget {
@@ -19,6 +21,14 @@ class UsersViewScreen extends StatelessWidget {
   }
 
   Widget _bodyView() {
+    return BlocBuilder<PassBloc, PassState>(
+      builder: (context, state) {
+        return _usernameView();
+      },
+    );
+  }
+
+  Widget _usernameView() {
     return ListView.builder(
       itemCount: superPassModel.passModel.length,
       itemBuilder: (context, index) {
@@ -30,9 +40,10 @@ class UsersViewScreen extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  // context
-                  //     .read<PassBloc>()
-                  //     .add(PassDeleteEvent(id: superPassModel.id));
+                  context.read<PassBloc>().add(PassDeleteEvent(
+                        title: superPassModel.title,
+                        username: pm.username,
+                      ));
                 },
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,

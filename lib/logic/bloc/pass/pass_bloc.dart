@@ -14,6 +14,7 @@ class PassBloc extends Bloc<PassEvent, PassState> {
     on<PassLoadEvent>(_passLoadEvent);
     on<PassAddEvent>(_passAddEvent);
     on<PassUpdateEvent>(_passUpdateEvent);
+    on<SuperPassDeleteEvent>(_superPassDeleteEvent);
     on<PassDeleteEvent>(_passDeleteEvent);
   }
 
@@ -42,10 +43,20 @@ class PassBloc extends Bloc<PassEvent, PassState> {
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
+  void _superPassDeleteEvent(
+      SuperPassDeleteEvent event, Emitter<PassState> emit) async {
+    print("Pass delete event called");
+    emit(PassInitial());
+    _passRepo.deleteData(title: event.title);
+
+    emit(PassLoadedState(await _passRepo.getData()));
+  }
+
   void _passDeleteEvent(PassDeleteEvent event, Emitter<PassState> emit) async {
     print("Pass delete event called");
     emit(PassInitial());
-    _passRepo.deleteData(event.title);
+    _passRepo.deleteData(title: event.title, username: event.username);
+
     emit(PassLoadedState(await _passRepo.getData()));
   }
 }

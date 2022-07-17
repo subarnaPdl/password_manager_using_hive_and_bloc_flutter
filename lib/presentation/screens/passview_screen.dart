@@ -60,6 +60,8 @@ class _PassViewScreenState extends State<PassViewScreen> {
                   border: OutlineInputBorder(),
                   labelText: "Username",
                 ),
+                validator: (_) =>
+                    _passwordTEC.text.isEmpty ? "Username is required" : null,
                 controller: _userNameTEC,
               ),
               const SizedBox(height: 15),

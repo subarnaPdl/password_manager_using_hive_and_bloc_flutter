@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
-import 'package:password_manager/presentation/screens/passview_screen.dart';
 import 'package:password_manager/presentation/screens/usersview_screen.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
@@ -103,9 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  context
-                      .read<PassBloc>()
-                      .add(PassDeleteEvent(title: superPassModel.title));
+                  context.read<PassBloc>().add(SuperPassDeleteEvent(
+                        title: superPassModel.title,
+                      ));
                 },
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,

@@ -53,12 +53,23 @@ class PassModelAdapter extends TypeAdapter<PassModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PassModel();
+    return PassModel(
+      username: fields[0] as String,
+      password: fields[1] as String,
+      notes: fields[2] as String,
+    );
   }
 
   @override
   void write(BinaryWriter writer, PassModel obj) {
-    writer..writeByte(0);
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.username)
+      ..writeByte(1)
+      ..write(obj.password)
+      ..writeByte(2)
+      ..write(obj.notes);
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
+import 'package:password_manager/presentation/utils/capitalize_first_letter.dart';
 
 class AddPassScreen extends StatefulWidget {
   const AddPassScreen({Key? key}) : super(key: key);
@@ -102,7 +103,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
 
                       if (isValidForm) {
                         context.read<PassBloc>().add(PassAddEvent(
-                              title: _nameTEC.text,
+                              title: _nameTEC.text.capitalize(),
                               passModel: PassModel(
                                 username: _userNameTEC.text,
                                 password: _passwordTEC.text,

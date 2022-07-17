@@ -9,7 +9,7 @@ class PassRepository {
   Future<void> init() async {
     Hive.registerAdapter(SuperPassModelAdapter());
     Hive.registerAdapter(PassModelAdapter());
-    _passList = await Hive.openBox<SuperPassModel>('password');
+    _passList = await Hive.openBox<SuperPassModel>('pass');
     print("Hive Loaded");
   }
 
@@ -28,10 +28,13 @@ class PassRepository {
   Future<void> saveData(String title, PassModel passModel) async {
     print("Store data called. title = $title");
 
+    // When adding for the first time
     if (!_passList.values.any((element) => element.title == title)) {
       await _passList.add(SuperPassModel(title: title, passModel: [passModel]));
-    } else {
-      print("executed");
+    }
+
+    // When title already exists
+    else {
       final pMs = _passList.values
           .firstWhere((element) => element.title == title)
           .passModel;
@@ -43,17 +46,27 @@ class PassRepository {
 
       await _passList.put(index, SuperPassModel(title: title, passModel: pMs));
     }
-
-    print("pass saved");
   }
 
   // Delete data
-  Future<void> deleteData(String title) async {
-    print("Delete data called. title = $title");
-
-    SuperPassModel passToRemove =
+  Future<void> deleteData({required String title, String? username}) async {
+    SuperPassModel passToDelete =
         _passList.values.firstWhere((element) => element.title == title);
-    await passToRemove.delete();
+    // When delete title called
+    if (username == null) {
+      await passToDelete.delete();
+    }
+
+    // When delete username called
+    else {
+      var passModels = passToDelete.passModel;
+      passModels.removeWhere((element) => element.username == username);
+
+      final index =
+          passToDelete.key as int; //index of pass to update after deleting
+      await _passList.put(
+          index, SuperPassModel(title: title, passModel: passModels));
+    }
   }
 
   // Update data
@@ -61,7 +74,6 @@ class PassRepository {
       {required String title,
       required String username,
       required PassModel newPassModel}) async {
-    print("Update data called. title = $title");
     final passToUpdate =
         _passList.values.firstWhere((element) => element.title == title);
     final passModels = passToUpdate.passModel;

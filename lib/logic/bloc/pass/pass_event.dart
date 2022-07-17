@@ -25,7 +25,13 @@ class PassUpdateEvent extends PassEvent {
   });
 }
 
+class SuperPassDeleteEvent extends PassEvent {
+  final String title;
+  SuperPassDeleteEvent({required this.title});
+}
+
 class PassDeleteEvent extends PassEvent {
   final String title;
-  PassDeleteEvent({required this.title});
+  final String username;
+  PassDeleteEvent({required this.title, required this.username});
 }
