@@ -23,13 +23,16 @@ class _PassViewScreenState extends State<PassViewScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isObscure = true;
+  bool _isInitial = true;
   bool _readOnly = true;
 
   @override
   Widget build(BuildContext context) {
-    _userNameTEC.text = widget.passModel.username;
-    _passwordTEC.text = widget.passModel.password;
-    _notesTEC.text = widget.passModel.notes;
+    if (_isInitial) {
+      _userNameTEC.text = widget.passModel.username;
+      _passwordTEC.text = widget.passModel.password;
+      _notesTEC.text = widget.passModel.notes;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -102,6 +105,7 @@ class _PassViewScreenState extends State<PassViewScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isObscure = !_isObscure;
+                                  _isInitial = false;
                                 });
                               })),
                       validator: (_) => _passwordTEC.text.isEmpty
