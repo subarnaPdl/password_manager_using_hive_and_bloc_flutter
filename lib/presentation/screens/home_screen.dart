@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _appBar(context),
       body: _bodyView(),
-      drawer: const SideMenu(),
+      // drawer: const SideMenu(),
       floatingActionButton: _floatingActionButton(),
     );
   }
