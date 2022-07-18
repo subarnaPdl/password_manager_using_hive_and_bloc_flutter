@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/utils/capitalize_first_letter.dart';
 
 class AddPassScreen extends StatefulWidget {
-  const AddPassScreen({Key? key}) : super(key: key);
+  final String title;
+  const AddPassScreen({Key? key, this.title = ''}) : super(key: key);
 
   @override
   State<AddPassScreen> createState() => _AddPassScreenState();
 }
 
 class _AddPassScreenState extends State<AddPassScreen> {
-  final _nameTEC = TextEditingController();
+  final _titleTEC = TextEditingController();
   final _userNameTEC = TextEditingController();
   final _passwordTEC = TextEditingController();
   final _notesTEC = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
   }
 
   Widget _bodyView() {
+    _titleTEC.text = widget.title;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -45,8 +49,8 @@ class _AddPassScreenState extends State<AddPassScreen> {
                   labelText: "Title",
                 ),
                 validator: (_) =>
-                    _nameTEC.text.isEmpty ? "Title is required" : null,
-                controller: _nameTEC,
+                    _titleTEC.text.isEmpty ? "Title is required" : null,
+                controller: _titleTEC,
               ),
               const SizedBox(height: 15),
 
@@ -65,13 +69,21 @@ class _AddPassScreenState extends State<AddPassScreen> {
 
               //
               TextFormField(
-                obscureText: true,
+                obscureText: _isObscure,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Password",
-                ),
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: "Password",
+                    suffixIcon: IconButton(
+                        icon: Icon(_isObscure
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        })),
                 validator: (_) =>
                     _passwordTEC.text.isEmpty ? "Password is required" : null,
                 controller: _passwordTEC,
@@ -105,7 +117,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
 
                       if (isValidForm) {
                         context.read<PassBloc>().add(PassAddEvent(
-                              title: _nameTEC.text.capitalize(),
+                              title: _titleTEC.text.capitalize(),
                               passModel: PassModel(
                                 username: _userNameTEC.text,
                                 password: _passwordTEC.text,

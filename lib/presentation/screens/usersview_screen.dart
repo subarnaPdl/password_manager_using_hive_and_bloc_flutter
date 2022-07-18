@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
+import 'package:password_manager/presentation/screens/addpass_screen.dart';
 import 'package:password_manager/presentation/screens/passview_screen.dart';
 
 class UsersViewScreen extends StatelessWidget {
@@ -17,6 +18,7 @@ class UsersViewScreen extends StatelessWidget {
         title: Text(superPassModel.title),
       ),
       body: _bodyView(),
+      floatingActionButton: _floatingActionButton(context),
     );
   }
 
@@ -24,6 +26,19 @@ class UsersViewScreen extends StatelessWidget {
     return BlocBuilder<PassBloc, PassState>(
       builder: (context, state) {
         return _usernameView();
+      },
+    );
+  }
+
+  Widget _floatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddPassScreen(title: superPassModel.title),
+            ));
       },
     );
   }

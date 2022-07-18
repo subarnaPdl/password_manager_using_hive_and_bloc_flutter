@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/screens/usersview_screen.dart';
+import 'package:password_manager/presentation/utils/search_delegate.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 
@@ -26,21 +28,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context),
       body: _bodyView(),
       drawer: const SideMenu(),
       floatingActionButton: _floatingActionButton(),
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: const Text("Home"),
+      title: const Text(
+        "Password Manager",
+      ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            // showSearch(context: context, delegate: CustomSearchDelegate());
+          },
           icon: const Icon(Icons.search),
-        ),
+        )
       ],
     );
   }
