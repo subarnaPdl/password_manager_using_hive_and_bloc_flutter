@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:password_manager/data/models/pass_model.dart';
+import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
+import 'package:password_manager/presentation/screens/usersview_screen.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
-  List<String> searchTerms = [
-    "Apple",
-    "Banana",
-    "Mango",
-    "Pear",
-    "Watermelons",
-    "Blueberries",
-    "Pineapples",
-    "Strawberries"
-  ];
+  final List<SuperPassModel> passList;
+  CustomSearchDelegate({required this.passList});
 
 // first overwrite to
 // clear the search text
@@ -41,10 +37,11 @@ class CustomSearchDelegate extends SearchDelegate {
 // third overwrite to show query result
   @override
   Widget buildResults(BuildContext context) {
+    final searchTerms = passList.map((e) => e.title).toList();
     List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
+    for (var pass in searchTerms) {
+      if (pass.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(pass);
       }
     }
     return ListView.builder(
@@ -53,7 +50,7 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
-          onTap: () {},
+          onTap: () => _openUsersView(context, result),
         );
       },
     );
@@ -64,9 +61,10 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
+    final searchTerms = passList.map((e) => e.title).toList();
+    for (var pass in searchTerms) {
+      if (pass.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(pass);
       }
     }
     return ListView.builder(
@@ -75,8 +73,22 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
+          onTap: () {
+            _openUsersView(context, result);
+          },
         );
       },
     );
+  }
+
+  void _openUsersView(BuildContext context, String title) {
+    close(context, null);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UsersViewScreen(
+              superPassModel:
+                  passList.firstWhere((element) => element.title == title)),
+        ));
   }
 }

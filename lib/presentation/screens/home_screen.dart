@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey key = GlobalKey();
+  List<SuperPassModel> _passList = [];
 
   @override
   void initState() {
@@ -43,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         IconButton(
           onPressed: () {
-            // showSearch(context: context, delegate: CustomSearchDelegate());
+            showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(passList: _passList));
           },
           icon: const Icon(Icons.search),
         )
@@ -57,9 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is PassInitial) {
           return _loadingView();
         } else if (state is PassLoadedState) {
-          return state.passList.isEmpty
+          _passList = state.passList;
+          return _passList.isEmpty
               ? _emptyPassView()
-              : _passListView(state.passList);
+              : _passListView(_passList);
         }
         return _loadingView();
       },
@@ -68,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _floatingActionButton() {
     return FloatingActionButton(
+      key: key,
       child: const Icon(Icons.add),
       onPressed: () => Navigator.of(context).pushNamed('/addPass'),
     );
