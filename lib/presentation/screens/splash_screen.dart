@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer(const Duration(seconds: 2),
-        () => Navigator.of(context).pushReplacementNamed('/home'));
+        () => Navigator.of(context).pushReplacementNamed('/signup'));
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.zero,

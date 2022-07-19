@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/presentation/screens/addpass_screen.dart';
 import 'package:password_manager/presentation/screens/home_screen.dart';
 import 'package:password_manager/presentation/screens/login_screen.dart';
-import 'package:password_manager/presentation/screens/passview_screen.dart';
 import 'package:password_manager/presentation/screens/signup_screen.dart';
 import 'package:password_manager/presentation/screens/splash_screen.dart';
 
@@ -15,8 +14,6 @@ Route routes(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const HomeScreen());
     case '/addPass':
       return MaterialPageRoute(builder: (_) => const AddPassScreen());
-    // case '/passView':
-    //   return MaterialPageRoute(builder: (_) => const PassViewScreen());
     case '/login':
       return MaterialPageRoute(builder: (_) => LoginScreen());
     case '/signup':

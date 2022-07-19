@@ -1,30 +1,25 @@
-// ignore_for_file: avoid_print
-
-import 'package:password_manager/data/dataproviders/readwrite_pass.dart';
+import 'package:hive/hive.dart';
 
 class AuthRepository {
-  login({required String password}) async {
-    print("Attempting Login");
+  late Box _masterPass;
 
-    SecureStorageUtil _verify = SecureStorageUtil();
-    // ignore: unrelated_type_equality_checks
-    if (password == await _verify.getPass(key: "MasterPass")) {
-      print("Logged in");
-      return true;
-    }
-
-    throw Exception("Password Incorrect");
+  Future<void> init() async {
+    _masterPass = await Hive.openBox('masterPassBox');
   }
 
-  signup({required String password}) async {
-    print("Attempting Signup");
+  Future<void> close() async {
+    await Hive.close();
+  }
 
-    try {
-      SecureStorageUtil _register = SecureStorageUtil();
-      await _register.putPass(key: "MasterPass", value: password);
-      print("Signup Success");
-    } catch (e) {
-      throw Exception("Failed to Signup");
+  Future<void> signup({required String password}) async {
+    _masterPass.put("MasterPass", password);
+  }
+
+  Future<bool> login({required String password}) async {
+    if (await _masterPass.get("MasterPass") == password) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

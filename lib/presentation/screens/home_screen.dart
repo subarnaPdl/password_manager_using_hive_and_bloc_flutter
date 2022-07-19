@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       title: const Text(
-        "Password Manager",
+        "NepPass",
       ),
       actions: [
         IconButton(
