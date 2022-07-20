@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_manager/data/repositories/auth_repository.dart';
 import 'package:password_manager/data/repositories/pass_repository.dart';
+import 'package:password_manager/logic/bloc/auth/auth_bloc.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/logic/bloc_observer.dart';
 import 'package:password_manager/presentation/routes/routes.dart';
@@ -19,10 +20,10 @@ void main() async {
       MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
-            create: (context) => AuthRepository(),
+            create: (context) => PassRepository(),
           ),
           RepositoryProvider(
-            create: (context) => PassRepository(),
+            create: (context) => AuthRepository(),
           ),
         ],
         child: const MyApp(),
@@ -40,9 +41,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => AuthBloc(context.read<AuthRepository>()),
+        ),
+        BlocProvider(
           create: (context) =>
               PassBloc(context.read<PassRepository>())..add(PassLoadEvent()),
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'My Pass',

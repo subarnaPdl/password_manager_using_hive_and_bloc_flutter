@@ -1,22 +1,18 @@
-import 'package:hive/hive.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthRepository {
-  late Box _masterPass;
+  final _preferences = const FlutterSecureStorage();
+  final key = "mpass";
 
-  Future<void> init() async {
-    _masterPass = await Hive.openBox('masterPassBox');
-  }
-
-  Future<void> close() async {
-    await Hive.close();
-  }
+  Future<bool> get isMasterPassCreated async =>
+      await _preferences.containsKey(key: key);
 
   Future<void> signup({required String password}) async {
-    _masterPass.put("MasterPass", password);
+    await _preferences.write(key: key, value: password);
   }
 
   Future<bool> login({required String password}) async {
-    if (await _masterPass.get("MasterPass") == password) {
+    if ((await _preferences.read(key: key)) == password) {
       return true;
     } else {
       return false;

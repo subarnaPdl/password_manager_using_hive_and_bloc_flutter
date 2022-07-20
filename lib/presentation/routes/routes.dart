@@ -9,7 +9,7 @@ import 'package:password_manager/presentation/screens/splash_screen.dart';
 Route routes(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (_) => const SplashScreen());
+      return MaterialPageRoute(builder: (_) => SplashScreen());
     case '/home':
       return MaterialPageRoute(builder: (_) => const HomeScreen());
     case '/addPass':
@@ -17,8 +17,8 @@ Route routes(RouteSettings settings) {
     case '/login':
       return MaterialPageRoute(builder: (_) => LoginScreen());
     case '/signup':
-      return MaterialPageRoute(builder: (_) => SignupScreen());
+      return MaterialPageRoute(builder: (_) => const SignupScreen());
     default:
-      return MaterialPageRoute(builder: (_) => const SplashScreen());
+      return MaterialPageRoute(builder: (_) => SplashScreen());
   }
 }

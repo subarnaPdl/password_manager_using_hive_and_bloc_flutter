@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:password_manager/logic/bloc/signup/signup_bloc.dart';
-import 'package:password_manager/logic/form_login_state.dart';
-import 'package:password_manager/data/repositories/auth_repository.dart';
+import 'package:password_manager/logic/bloc/auth/auth_bloc.dart';
 
-class SignupScreen extends StatelessWidget {
-  SignupScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _passTEC = TextEditingController();
+  final _confirmPassTEC = TextEditingController();
+
+  String? _validatePass(String pass) {
+    if (pass.isEmpty) {
+      return "Please set a master password";
+    } else if (pass.length < 5) {
+      return "Enter atleast 6 characters";
+    } else {
+      return null;
+    }
+  }
+
+  String? _validateConfirmPass(String pass, String confirmPass) {
+    if (confirmPass != pass) {
+      return "Not same as password";
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,104 +50,70 @@ class SignupScreen extends StatelessWidget {
                 "Please register a master password to start using the application. Note that if the master password is lost the stored data cannot be recovered because of the missing sync option. It is strongly recommended that you backup your data at regular intervals.",
                 style: TextStyle(fontStyle: FontStyle.italic)),
             const SizedBox(height: 25),
-            BlocProvider(
-              create: (context) => SignupBloc(
-                authRepo: context.read<AuthRepository>(),
-              ),
-              child: _loginForm(),
-            ),
+            _bodyView(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _loginForm() {
-    return BlocListener<SignupBloc, SignupState>(
-      listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is FormSubmissionFailed) {
-          _showSnackBar(context, formStatus.exception);
-        } else if (formStatus is FormSubmissionSuccess) {
-          Navigator.of(context).pushReplacementNamed('/login');
-        }
-      },
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            _passwordField(),
-            const SizedBox(height: 20),
-            _confirmPasswordField(),
-            const SizedBox(height: 20),
-            _loginButton(),
-          ],
-        ),
+  Widget _bodyView(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          _passwordField(),
+          const SizedBox(height: 20),
+          _confirmPasswordField(),
+          const SizedBox(height: 20),
+          _loginButton(context),
+        ],
       ),
     );
   }
 
   Widget _passwordField() {
-    return BlocBuilder<SignupBloc, SignupState>(
-      builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Password",
-          ),
-          validator: (value) =>
-              state.isValidPassword ? null : "Password is too short",
-          onChanged: (value) => context
-              .read<SignupBloc>()
-              .add(SignupPasswordChanged(password: value)),
-        );
-      },
+    return TextFormField(
+      obscureText: true,
+      enableSuggestions: false,
+      autocorrect: false,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "Password",
+      ),
+      controller: _passTEC,
+      validator: (_) => _validatePass(_passTEC.text),
     );
   }
 
   Widget _confirmPasswordField() {
-    return BlocBuilder<SignupBloc, SignupState>(
-      builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Confirm Password",
-          ),
-          validator: (value) =>
-              state.isValidConfirmPassword ? null : "Not same as password",
-          onChanged: (value) => context
-              .read<SignupBloc>()
-              .add(SignupConfirmPasswordChanged(confirmPassword: value)),
-        );
-      },
+    return TextFormField(
+      obscureText: true,
+      enableSuggestions: false,
+      autocorrect: false,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "Confirm Password",
+      ),
+      controller: _confirmPassTEC,
+      validator: (_) =>
+          _validateConfirmPass(_passTEC.text, _confirmPassTEC.text),
     );
   }
 
-  Widget _loginButton() {
-    return BlocBuilder<SignupBloc, SignupState>(
-      builder: (context, state) {
-        return state.formStatus is FormSubmitting
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<SignupBloc>().add(SignupSubmitted());
-                  }
-                },
-                child: const Text("Register"),
-              );
-      },
-    );
-  }
+  Widget _loginButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        final isValidForm = _formKey.currentState!.validate();
 
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (isValidForm) {
+          context
+              .read<AuthBloc>()
+              .add(AuthSignupEvent(password: _passTEC.text));
+          Navigator.of(context).pushReplacementNamed('/login');
+        }
+      },
+      child: const Text("Register"),
+    );
   }
 }

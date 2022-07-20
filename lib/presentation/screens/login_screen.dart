@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:password_manager/logic/bloc/login/login_bloc.dart';
-import 'package:password_manager/logic/form_login_state.dart';
-import 'package:password_manager/data/repositories/auth_repository.dart';
+import 'package:password_manager/logic/bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  final _passTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +25,19 @@ class LoginScreen extends StatelessWidget {
             const Text("Enter your master password to login.",
                 style: TextStyle(fontStyle: FontStyle.italic)),
             const SizedBox(height: 25),
-            BlocProvider(
-              create: (context) => LoginBloc(
-                authRepo: context.read<AuthRepository>(),
-              ),
-              child: _loginForm(),
-            ),
+            _loginForm(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _loginForm() {
-    return BlocListener<LoginBloc, LoginState>(
+  Widget _loginForm(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        final formStatus = state.formStatus;
-        if (formStatus is FormSubmissionFailed) {
-          _showSnackBar(context, formStatus.exception);
-        } else if (formStatus is FormSubmissionSuccess) {
+        if (state is AuthLoginFailedState) {
+          _showSnackBar(context, state.exception);
+        } else {
           Navigator.of(context).pushReplacementNamed('/home');
         }
       },
@@ -54,7 +47,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             _passwordField(),
             const SizedBox(height: 20),
-            _loginButton(),
+            _loginButton(context),
           ],
         ),
       ),
@@ -62,38 +55,28 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _passwordField() {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Password",
-          ),
-          onChanged: (value) => context
-              .read<LoginBloc>()
-              .add(LoginPasswordChanged(password: value)),
-        );
-      },
+    return TextFormField(
+      obscureText: true,
+      enableSuggestions: false,
+      autocorrect: false,
+      controller: _passTEC,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "Password",
+      ),
     );
   }
 
-  Widget _loginButton() {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        return state.formStatus is FormSubmitting
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<LoginBloc>().add(LoginSubmitted());
-                  }
-                },
-                child: const Text("Login"),
-              );
+  Widget _loginButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        final isValidForm = _formKey.currentState!.validate();
+
+        if (isValidForm) {
+          context.read<AuthBloc>().add(AuthLoginEvent(password: _passTEC.text));
+        }
       },
+      child: const Text("Login"),
     );
   }
 
