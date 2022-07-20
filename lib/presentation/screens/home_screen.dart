@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:password_manager/data/models/pass_model.dart';
-import 'package:password_manager/data/repositories/auth_repository.dart';
+import 'package:password_manager/data/repositories/home_repository.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/screens/usersview_screen.dart';
 import 'package:password_manager/presentation/utils/search_delegate.dart';
@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey key = GlobalKey();
   List<SuperPassModel> _passList = [];
-  final _authRepository = AuthRepository();
+  final _homeRepository = HomeRepository();
 
   @override
   void initState() {
@@ -29,8 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void launchTutorial() async {
-    bool isFirstTime = await _authRepository.isMasterPassCreated ? false : true;
+    bool isFirstTime = await _homeRepository.isFirstTime;
     if (isFirstTime) {
+      _homeRepository.setFirstTimeAsFalse();
       showTutorial(context, key);
     }
   }
