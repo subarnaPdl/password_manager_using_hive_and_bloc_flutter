@@ -35,9 +35,13 @@ class LoginScreen extends StatelessWidget {
   Widget _loginForm(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        // Hide keyboard immediately
+        FocusManager.instance.primaryFocus?.unfocus();
         if (state is AuthLoginFailedState) {
           _showSnackBar(context, state.exception);
         } else {
+          // Hide snackbar immediately
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           Navigator.of(context).pushReplacementNamed('/home');
         }
       },

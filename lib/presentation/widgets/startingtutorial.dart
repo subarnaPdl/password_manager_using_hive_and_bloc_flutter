@@ -4,7 +4,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 List<TargetFocus> targets = [];
 late TutorialCoachMark tutorialCoachMark;
 
-void launchTutorial(BuildContext context, GlobalKey key) {
+void showTutorial(BuildContext context, GlobalKey key) {
   targets.add(TargetFocus(
     identify: "Target 1",
     keyTarget: key,
