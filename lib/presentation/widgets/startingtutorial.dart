@@ -4,10 +4,14 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 List<TargetFocus> targets = [];
 late TutorialCoachMark tutorialCoachMark;
 
-void showTutorial(BuildContext context, GlobalKey key) {
+void showTutorial(BuildContext context) {
+  final size = MediaQuery.of(context).size;
   targets.add(TargetFocus(
     identify: "Target 1",
-    keyTarget: key,
+    targetPosition: TargetPosition(
+      const Size.fromRadius(22),
+      Offset(size.width - 66, size.height - 66),
+    ),
     contents: [
       TargetContent(
           align: ContentAlign.left,
@@ -29,7 +33,6 @@ void showTutorial(BuildContext context, GlobalKey key) {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(height: 50)
             ],
           )),
     ],

@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  GlobalKey key = GlobalKey();
   List<SuperPassModel> _passList = [];
   final _homeRepository = HomeRepository();
 
@@ -32,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isFirstTime = await _homeRepository.isFirstTime;
     if (isFirstTime) {
       _homeRepository.setFirstTimeAsFalse();
-      showTutorial(context, key);
+      showTutorial(context);
     }
   }
 
@@ -82,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _floatingActionButton() {
     return FloatingActionButton(
-      key: key,
       child: const Icon(Icons.add),
       onPressed: () => Navigator.of(context).pushNamed('/addPass'),
     );
