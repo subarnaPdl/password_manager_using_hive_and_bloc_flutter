@@ -17,7 +17,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _validatePass(String pass) {
     if (pass.isEmpty) {
       return "Please set a master password";
-    } else if (pass.length < 5) {
+    } else if (pass.length < 6) {
       return "Enter atleast 6 characters";
     } else {
       return null;
