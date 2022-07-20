@@ -17,7 +17,8 @@ class _SideMenuState extends State<SideMenu> {
           children: [
             // Header
             ListTile(
-              leading: Image.asset("assets/images/logo36.png"),
+              leading:
+                  Image.asset("assets/images/logo.png", height: 36, width: 36),
               title: const Text(
                 "My Pass",
                 style: TextStyle(fontSize: 20),

@@ -22,7 +22,11 @@ class SplashScreen extends StatelessWidget {
         child: AppBar(),
       ),
       body: Center(
-        child: Image.asset("assets/images/logo64.png"),
+        child: Image.asset(
+          "assets/images/logo.png",
+          height: 64,
+          width: 64,
+        ),
       ),
     );
   }

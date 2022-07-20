@@ -21,6 +21,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
+  bool _isInitial = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,9 @@ class _AddPassScreenState extends State<AddPassScreen> {
   }
 
   Widget _bodyView() {
-    _titleTEC.text = widget.title;
+    if (_isInitial) {
+      _titleTEC.text = widget.title;
+    }
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -82,6 +85,7 @@ class _AddPassScreenState extends State<AddPassScreen> {
                         onPressed: () {
                           setState(() {
                             _isObscure = !_isObscure;
+                            _isInitial = false;
                           });
                         })),
                 validator: (_) =>

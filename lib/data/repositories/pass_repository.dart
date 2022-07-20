@@ -10,24 +10,19 @@ class PassRepository {
     Hive.registerAdapter(SuperPassModelAdapter());
     Hive.registerAdapter(PassModelAdapter());
     _passList = await Hive.openBox<SuperPassModel>('pass');
-    print("Hive Loaded");
   }
 
   Future<void> close() async {
     await Hive.close();
-    print("Hive Closed");
   }
 
   // Fetch data
   Future<List<SuperPassModel>> getData() async {
-    print("Fetch data called.");
     return _passList.values?.toList() ?? [];
   }
 
   // Store data
   Future<void> saveData(String title, PassModel passModel) async {
-    print("Store data called. title = $title");
-
     // When adding for the first time
     if (!_passList.values.any((element) => element.title == title)) {
       await _passList.add(SuperPassModel(title: title, passModel: [passModel]));
@@ -79,7 +74,7 @@ class PassRepository {
     final passModels = passToUpdate.passModel;
     final index = passModels.indexWhere((element) =>
         element.username == username); //index of username to update
-    print(index);
+
     passModels[index] = newPassModel;
 
     final index2 = passToUpdate.key as int; //index of pass to update

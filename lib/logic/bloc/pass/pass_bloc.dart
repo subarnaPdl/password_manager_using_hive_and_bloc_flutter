@@ -20,21 +20,18 @@ class PassBloc extends Bloc<PassEvent, PassState> {
 
   Future<void> _passLoadEvent(
       PassLoadEvent event, Emitter<PassState> emit) async {
-    print("Pass load event called");
     await _passRepo.init();
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   Future<void> _passAddEvent(
       PassAddEvent event, Emitter<PassState> emit) async {
-    print("Pass add event called");
     emit(PassInitial());
     _passRepo.saveData(event.title, event.passModel);
     emit(PassLoadedState(await _passRepo.getData()));
   }
 
   void _passUpdateEvent(PassUpdateEvent event, Emitter<PassState> emit) async {
-    print("Pass update event called");
     emit(PassInitial());
     _passRepo.updateData(
         title: event.title,
@@ -45,7 +42,6 @@ class PassBloc extends Bloc<PassEvent, PassState> {
 
   void _superPassDeleteEvent(
       SuperPassDeleteEvent event, Emitter<PassState> emit) async {
-    print("Pass delete event called");
     emit(PassInitial());
     _passRepo.deleteData(title: event.title);
 
@@ -53,7 +49,6 @@ class PassBloc extends Bloc<PassEvent, PassState> {
   }
 
   void _passDeleteEvent(PassDeleteEvent event, Emitter<PassState> emit) async {
-    print("Pass delete event called");
     emit(PassInitial());
     _passRepo.deleteData(title: event.title, username: event.username);
 
