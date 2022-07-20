@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("NepPass"),
+        title: const Text("Password Manager"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30),

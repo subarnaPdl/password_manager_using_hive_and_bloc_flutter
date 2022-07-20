@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.password_manager">
    <application
-        android:label="password_manager"
+        android:label="Password Manager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
