@@ -75,13 +75,11 @@ class PassRepository {
 
       // When title does not exist in trash
       if (!_trashList.values.any((element) => element.title == title)) {
-        print("Delete title, title doesn't exist in trash");
         await _trashList.add(passToAdd);
       }
 
       // When title exists in trash
       else {
-        print("Delete title, title exists in trash");
         var pMs = _trashList.values
             .firstWhere((element) => element.title == title)
             .passModel;
@@ -106,18 +104,9 @@ class PassRepository {
 
       // When title doesnot exist in trash
       if (!_trashList.values.any((element) => element.title == title)) {
-        print("Delete username, title doesn't exist in trash");
-
         final passModel = passToAdd.passModel
             .where((element) => element.username == username)
             .toList();
-
-        int i = 1;
-        print("pMs List:");
-        for (var element in passModel) {
-          print("$i. ${element.username}");
-          i++;
-        }
 
         await _trashList
             .add(TrashSuperPassModel(title: title, passModel: passModel));
@@ -125,7 +114,6 @@ class PassRepository {
 
       // When title exists in trash
       else {
-        print("Delete username, title exists in trash");
         var pMs = _trashList.values
             .firstWhere((element) => element.title == title)
             .passModel;
