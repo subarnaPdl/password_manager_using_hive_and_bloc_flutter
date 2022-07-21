@@ -7,6 +7,7 @@ import 'package:password_manager/data/repositories/home_repository.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/screens/usersview_screen.dart';
 import 'package:password_manager/presentation/utils/search_delegate.dart';
+import 'package:password_manager/presentation/widgets/confirmation_dailog.dart';
 import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 
@@ -37,11 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      body: _bodyView(),
-      drawer: const SideMenu(),
-      floatingActionButton: _floatingActionButton(),
+    return WillPopScope(
+      onWillPop: () => showConfirmationDailog(
+          context: context,
+          title: 'Exit App',
+          content: 'Do you want to exit the App?'),
+      child: Scaffold(
+        appBar: _appBar(context),
+        body: _bodyView(),
+        drawer: const SideMenu(),
+        floatingActionButton: _floatingActionButton(),
+      ),
     );
   }
 
