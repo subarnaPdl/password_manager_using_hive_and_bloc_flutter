@@ -31,10 +31,11 @@ class UsersViewScreen extends StatelessWidget {
             title: 'Delete ${superPassModel.title}',
             content: 'It will delete all the passwords saved under this title.',
             yesAction: () {
+              Navigator.pop(context);
               context.read<PassBloc>().add(SuperPassDeleteEvent(
                     title: superPassModel.title,
                   ));
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
           ),
           icon: const Icon(Icons.delete),
