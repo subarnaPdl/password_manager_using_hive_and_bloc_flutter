@@ -19,10 +19,8 @@ class _SideMenuState extends State<SideMenu> {
             ListTile(
               leading:
                   Image.asset("assets/images/logo.png", height: 36, width: 36),
-              title: const Text(
-                "My Pass",
-                style: TextStyle(fontSize: 20),
-              ),
+              title: const Text("Password Manager",
+                  style: TextStyle(fontSize: 20)),
               onTap: () => {},
             ),
             const Divider(color: Colors.black54, thickness: 0.8),
@@ -31,31 +29,12 @@ class _SideMenuState extends State<SideMenu> {
             SMListTile(
               icon: Icons.all_inbox,
               text: "All",
-              onTap: () => {},
-            ),
-            const Divider(color: Colors.black54, thickness: 0.8),
-
-            SMListTile(
-              icon: Icons.archive_outlined,
-              text: "Archived",
-              onTap: () => {},
+              onTap: () => Navigator.of(context).pushReplacementNamed('/home'),
             ),
             SMListTile(
               icon: Icons.delete_outline,
               text: "Trash",
-              onTap: () => {},
-            ),
-            const Divider(color: Colors.black54, thickness: 0.8),
-
-            SMListTile(
-              icon: Icons.edit_outlined,
-              text: "Edit Labels",
-              onTap: () => {},
-            ),
-            SMListTile(
-              icon: Icons.settings_outlined,
-              text: "Settings",
-              onTap: () => {},
+              onTap: () => Navigator.of(context).pushReplacementNamed('/trash'),
             ),
             const Divider(color: Colors.black54, thickness: 0.8),
 
@@ -74,6 +53,8 @@ class _SideMenuState extends State<SideMenu> {
               text: "Disclaimer",
               onTap: () => {},
             ),
+            const Divider(color: Colors.black54, thickness: 0.8),
+
             SMListTile(
               icon: Icons.share_outlined,
               text: "Share",

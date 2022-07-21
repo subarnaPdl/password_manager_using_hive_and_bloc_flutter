@@ -35,3 +35,13 @@ class PassDeleteEvent extends PassEvent {
   final String username;
   PassDeleteEvent({required this.title, required this.username});
 }
+
+class TrashSuperPassDeleteEvent extends PassEvent {
+  final String title;
+  TrashSuperPassDeleteEvent({required this.title});
+}
+
+class PassRecoveryEvent extends PassEvent {
+  final String title;
+  PassRecoveryEvent({required this.title});
+}

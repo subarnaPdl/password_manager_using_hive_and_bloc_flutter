@@ -7,7 +7,7 @@ import 'package:password_manager/data/repositories/home_repository.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/screens/usersview_screen.dart';
 import 'package:password_manager/presentation/utils/search_delegate.dart';
-// import 'package:password_manager/presentation/widgets/sidemenu.dart';
+import 'package:password_manager/presentation/widgets/sidemenu.dart';
 import 'package:password_manager/presentation/widgets/startingtutorial.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _appBar(context),
       body: _bodyView(),
-      // drawer: const SideMenu(),
+      drawer: const SideMenu(),
       floatingActionButton: _floatingActionButton(),
     );
   }

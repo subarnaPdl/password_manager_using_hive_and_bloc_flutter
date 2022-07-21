@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:password_manager/data/models/pass_model.dart';
+import 'package:password_manager/data/models/trash_pass_model.dart';
 import 'package:password_manager/data/repositories/pass_repository.dart';
 
 part 'pass_event.dart';
@@ -16,42 +17,63 @@ class PassBloc extends Bloc<PassEvent, PassState> {
     on<PassUpdateEvent>(_passUpdateEvent);
     on<SuperPassDeleteEvent>(_superPassDeleteEvent);
     on<PassDeleteEvent>(_passDeleteEvent);
+    on<TrashSuperPassDeleteEvent>(_trashSuperPassDeleteEvent);
+    on<PassRecoveryEvent>(_passRecoveryEvent);
   }
 
   Future<void> _passLoadEvent(
       PassLoadEvent event, Emitter<PassState> emit) async {
+    emit(PassInitial());
     await _passRepo.init();
-    emit(PassLoadedState(await _passRepo.getData()));
+    await _emitPassLoadedState(emit);
   }
 
   Future<void> _passAddEvent(
       PassAddEvent event, Emitter<PassState> emit) async {
     emit(PassInitial());
-    _passRepo.saveData(event.title, event.passModel);
-    emit(PassLoadedState(await _passRepo.getData()));
+    await _passRepo.saveData(event.title, event.passModel);
+    await _emitPassLoadedState(emit);
   }
 
   void _passUpdateEvent(PassUpdateEvent event, Emitter<PassState> emit) async {
     emit(PassInitial());
-    _passRepo.updateData(
+    await _passRepo.updateData(
         title: event.title,
         username: event.username,
         newPassModel: event.passModel);
-    emit(PassLoadedState(await _passRepo.getData()));
+    await _emitPassLoadedState(emit);
   }
 
   void _superPassDeleteEvent(
       SuperPassDeleteEvent event, Emitter<PassState> emit) async {
     emit(PassInitial());
-    _passRepo.deleteData(title: event.title);
-
-    emit(PassLoadedState(await _passRepo.getData()));
+    await _passRepo.deleteData(title: event.title);
+    await _emitPassLoadedState(emit);
   }
 
   void _passDeleteEvent(PassDeleteEvent event, Emitter<PassState> emit) async {
     emit(PassInitial());
-    _passRepo.deleteData(title: event.title, username: event.username);
+    await _passRepo.deleteData(title: event.title, username: event.username);
+    await _emitPassLoadedState(emit);
+  }
 
-    emit(PassLoadedState(await _passRepo.getData()));
+  void _trashSuperPassDeleteEvent(
+      TrashSuperPassDeleteEvent event, Emitter<PassState> emit) async {
+    emit(PassInitial());
+    await _passRepo.deleteTrashData(title: event.title);
+    await _emitPassLoadedState(emit);
+  }
+
+  void _passRecoveryEvent(
+      PassRecoveryEvent event, Emitter<PassState> emit) async {
+    emit(PassInitial());
+    await _passRepo.recoverData(title: event.title);
+    await _emitPassLoadedState(emit);
+  }
+
+  Future<void> _emitPassLoadedState(Emitter<PassState> emit) async {
+    emit(PassLoadedState(
+        passList: await _passRepo.getData(),
+        trashList: await _passRepo.getTrashData()));
   }
 }

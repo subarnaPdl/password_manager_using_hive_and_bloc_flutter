@@ -7,6 +7,7 @@ class PassInitial extends PassState {}
 
 class PassLoadedState extends PassState {
   final List<SuperPassModel> passList;
+  final List<TrashSuperPassModel> trashList;
 
-  PassLoadedState(this.passList);
+  PassLoadedState({required this.passList, required this.trashList});
 }
