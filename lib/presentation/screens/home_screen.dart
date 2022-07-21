@@ -40,9 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => showConfirmationDailog(
-          context: context,
-          title: 'Exit App',
-          content: 'Do you want to exit the App?'),
+        context: context,
+        title: 'Exit App',
+        content: 'Do you want to exit the App?',
+        yesAction: () => Navigator.of(context).pop(true),
+      ),
       child: Scaffold(
         appBar: _appBar(context),
         body: _bodyView(),

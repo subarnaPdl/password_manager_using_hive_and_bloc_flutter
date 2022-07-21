@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/logic/bloc/pass/pass_bloc.dart';
 import 'package:password_manager/presentation/utils/copy_to_clipboard.dart';
+import 'package:password_manager/presentation/widgets/confirmation_dailog.dart';
 
 class PassViewScreen extends StatefulWidget {
   final String title;
@@ -34,20 +35,41 @@ class _PassViewScreenState extends State<PassViewScreen> {
       _notesTEC.text = widget.passModel.notes;
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _readOnly = false;
-              });
-            },
-            icon: const Icon(Icons.edit),
-          )
-        ],
-      ),
+      appBar: _appBar(),
       body: _bodyView(),
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      title: Text(widget.title),
+      actions: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _readOnly = false;
+            });
+          },
+          icon: const Icon(Icons.edit),
+        ),
+        IconButton(
+          onPressed: () => showConfirmationDailog(
+            context: context,
+            title: 'Delete ${widget.title}',
+            content:
+                'It will ${widget.passModel.username} from ${widget.title}.',
+            yesAction: () {
+              Navigator.pop(context);
+              context.read<PassBloc>().add(PassDeleteEvent(
+                    title: widget.title,
+                    username: widget.passModel.username,
+                  ));
+              Navigator.pop(context);
+            },
+          ),
+          icon: const Icon(Icons.delete),
+        ),
+      ],
     );
   }
 
