@@ -17,11 +17,16 @@ class _TrashScreenState extends State<TrashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: _bodyView(),
-      drawer: const SideMenu(),
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pushReplacementNamed('/home');
+          return false;
+        },
+        child: Scaffold(
+          appBar: _appBar(),
+          body: _bodyView(),
+          drawer: const SideMenu(),
+        ));
   }
 
   AppBar _appBar() {
