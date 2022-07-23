@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SMListTile extends StatelessWidget {
   final IconData icon;
   final String text;
-  final Function()? onTap;
+  final void Function()? onTap;
   const SMListTile(
       {Key? key, required this.icon, required this.text, required, this.onTap})
       : super(key: key);
