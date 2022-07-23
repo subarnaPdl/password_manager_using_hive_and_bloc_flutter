@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:password_manager/data/models/pass_model.dart';
 import 'package:password_manager/data/repositories/home_repository.dart';
@@ -39,12 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => showConfirmationDailog(
-        context: context,
-        title: 'Exit App',
-        content: 'Do you want to exit the App?',
-        yesAction: () => Navigator.of(context).pop(true),
-      ),
+      onWillPop: () => exitAppConfirmation(context),
       child: Scaffold(
         appBar: _appBar(context),
         body: _bodyView(),
@@ -123,34 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: passList.length,
       itemBuilder: (context, index) {
         SuperPassModel superPassModel = passList[index];
-        return Slidable(
-          endActionPane: ActionPane(
-            extentRatio: 0.2,
-            motion: const ScrollMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) {
-                  context.read<PassBloc>().add(SuperPassDeleteEvent(
-                        title: superPassModel.title,
-                      ));
-                },
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                icon: Icons.delete,
-              )
-            ],
-          ),
-          child: ListTile(
-            title: Text(superPassModel.title),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        UsersViewScreen(superPassModel: superPassModel),
-                  ));
-            },
-          ),
+        return ListTile(
+          title: Text(superPassModel.title),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      UsersViewScreen(superPassModel: superPassModel),
+                ));
+          },
         );
       },
     );

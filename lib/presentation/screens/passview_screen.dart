@@ -53,19 +53,10 @@ class _PassViewScreenState extends State<PassViewScreen> {
           icon: const Icon(Icons.edit),
         ),
         IconButton(
-          onPressed: () => showConfirmationDailog(
+          onPressed: () => deleteUsernameConfirmation(
             context: context,
-            title: 'Delete ${widget.title}',
-            content:
-                'It will ${widget.passModel.username} from ${widget.title}.',
-            yesAction: () {
-              Navigator.pop(context);
-              context.read<PassBloc>().add(PassDeleteEvent(
-                    title: widget.title,
-                    username: widget.passModel.username,
-                  ));
-              Navigator.pop(context);
-            },
+            title: widget.title,
+            username: widget.passModel.username,
           ),
           icon: const Icon(Icons.delete),
         ),

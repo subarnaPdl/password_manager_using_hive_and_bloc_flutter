@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:password_manager/presentation/widgets/confirmation_dailog.dart';
 import 'package:password_manager/presentation/widgets/sidemenu_tiles.dart';
 import 'package:rate_my_app/rate_my_app.dart';
@@ -142,12 +141,7 @@ class _SideMenuState extends State<SideMenu> {
               text: "Exit",
               onTap: () async {
                 Navigator.pop(context);
-                await showConfirmationDailog(
-                  context: context,
-                  title: 'Exit App',
-                  content: 'Do you want to exit the App?',
-                  yesAction: () => SystemNavigator.pop(),
-                );
+                exitAppConfirmation(context);
               },
             ),
           ],
